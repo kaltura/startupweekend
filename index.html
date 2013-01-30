@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
-<title>FlixMaster Gated Content Demo</title>
+<title>FlixMaster API Demo -- Basho Goes to Lunch</title>
 <style type="text/css">@import url(styles.css);</style>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
 <script src="http://cdn1.flixmaster.com/api/v1.js" type="text/javascript"></script>
@@ -46,8 +46,20 @@ $(function(){
 			console.log(action.progress); // Percentage progress (0, 25, 50, 75, 98)
 			console.log(action.clipname); // Name of the media clip in the Node firing the event
 			console.log(action.time); // Current playback time in seconds
+
+			// if... "Chatter.com-_Halftime_Ad_1_with_will.i.am.mp4"
+			if(aciton.progress == 0){
+				reset_adventure();
+			}else if(action.progress == 25){
+				receive_taco();
+			}else if(action.progress == 50){
+				receive_mate();
+			}else if(action.progress == 75){
+				receive_coupon();
+			}
 		}
 	});
+	reset_adventure();
 });
 </script>
 </head>
@@ -74,9 +86,7 @@ $(function(){
 			<div>
 				<h3>Basho's Inventory:</h3>
 				<ul id="inventory">
-					<li class="active"><strong>1.</strong> Click to play video.</li>
-					<li><strong>2.</strong> Click first button option.</li>
-					<li><strong>3.</strong> Fill out form and press submit.</li>
+					<li><p>Empty handed!<p></li>
 				</ul>
 			</div>
 		</div>
