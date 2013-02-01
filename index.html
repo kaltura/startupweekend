@@ -8,19 +8,9 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
 <script src="http://cdn1.flixmaster.com/api/v1.js" type="text/javascript"></script>
 <script type="text/javascript">
-	function enter(location){
-		var image = "#eee";
-		if(location == "atlas"){
-			image = 'url(images/cake.jpg)';
-		}else if(location == "mcdevitt"){
-			image = 'url(images/beers.jpg)';
-		}
-		$("#content").css({
-			'background-image': image,
-			'background-size': '100%'
-		});
-	}
 $(function(){
+	var has_coupon = false;
+
 	function explode($o){
 		$o.css("position", "relative");
 		$o.css({position: "relative",
@@ -36,9 +26,31 @@ $(function(){
 	    },1000,function(){ this.remove(); });
 	}
 
+	function enter(location){
+		var image = false;
+		if(location == "atlas"){
+			image = 'url(images/background-atlas.jpg)';
+		}else if(location == "mcdevitt"){
+			image = 'url(images/background-mcdevitt.jpg)';
+		}
+		if(image){
+			$("#content").css({
+				'background-image': image,
+				'background-size': '100%',
+				'color': "#eee"
+			});
+		}else{
+			$("#content").css({
+				'background': "#eee",
+				'color': "black"
+			})
+		}
+	}
+
 	function reset_adventure(){
 		$("#inventory").empty();
 		$("#items").find(".empty").clone(false).appendTo("#inventory");
+		has_coupon = false;
 	}
 
 	function remove_empty_message(){
@@ -50,7 +62,7 @@ $(function(){
 		remove_empty_message();
 		// clone taco element into inventory
 		$("#items").find("."+item).clone(false).appendTo("#inventory");
-		$("#inventory").append("<span>Received item!</span>");
+		$("#inventory").append("<span style='color: #fff;'>Received item!</span>");
 		explode($("#inventory").find("span"));
 		//$("#inventory").find("span").remove();
 	}
@@ -60,6 +72,13 @@ $(function(){
 		var action = e.action, event = e.event;
 		console.log(action);
 		if(event == "flixmaster_button_click"){
+			if(action == "COUPON"){
+				if(has_coupon == false){
+					has_coupon = true;
+					receive_item("coupon");	
+				}				
+			}
+
 			console.log(action); // The action payload. Will be the string from the Node Editor
 		} else if(event == "flixmaster_attention") {
 			console.log(action.progress); // Percentage progress (0, 25, 50, 75, 98)
@@ -68,14 +87,45 @@ $(function(){
 
 			// if... "Chatter.com-_Halftime_Ad_1_with_will.i.am.mp4"
 			if(action.progress == 0){
-				reset_adventure();
-			}else if(action.progress == 25){
+				if(action.clipname == "intro.mov"){
+					reset_adventure();
+				}
+
+				if(action.clipname == "McDevitt_first_stop.mov" || action.clipname == "McDevitt second stop"){
+					enter("mcdevitt");
+				}
+
+				if(action.clipname == "altas_second_stop.mov" || action.clipname == "atlas first stop"){
+					enter("atlas");
+				}
+
+				if(action.clipname == "final_clip.mov"){
+					enter("outdoors");
+				}
+			}
+
+			if(action.clipname == "atlas first stop" && action.progress == 75){
+				receive_item("mate");
+			}
+
+			if(action.clipname == "altas_second_stop.mov" && action.progress == 50){
+				receive_item("mate");
+			}
+
+			if(action.clipname == "McDevitt second stop" && action.progress == 50){
+				receive_item("taco");
+			}
+
+			if(action.clipname == "McDevitt_first_stop.mov" && action.progress == 75){
+				receive_item("taco")
+			}
+
+/*			}else if(action.progress == 25){
 				receive_item("taco");
 			}else if(action.progress == 50){
 				receive_item("mate");
 			}else if(action.progress == 75){
-				receive_item("coupon");
-			}
+			}*/
 		}
 	});
 	reset_adventure();
@@ -112,16 +162,16 @@ $(function(){
 	</div>
 	<ul id="items" style="display:none;">
 		<li class="empty">
-			<p>Empty handed!<p>
+			<p>Basho is empty handed!<p>
 		</li>
 		<li class="taco">
-			<p>Fancy taco icon!</p>
+			<p><img src="images/taco.png" style="width: 200px;" /></p>
 		</li>
 		<li class="mate">
-			<p>Fancy mate drink!</p>
+			<p><img src="images/mate.png" style="width: 200px;" /></p>
 		</li>
 		<li class="coupon">
-			<p>Coupon with link to downloadable pdf</p>
+			<p style="width: 200px; background: #eee; border: solid black 1px;"><a href="coupon.html" target="_blank">Coupon! Click to redeem</a></p>
 		</li>
 	</ul>
 </div>

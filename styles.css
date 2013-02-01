@@ -138,34 +138,34 @@ table {
 	display: none;
 }
 
-#form {
+#inventory-wrapper {
 	float: right;
 	width: 280px;
 }
 
-#form #guide li {
+#inventory-wrapper #guide li {
 	border-bottom: 1px solid #fff;
 	font-size: 14px;
 	line-height: 3em;
 }
 
-#form #guide li:last-child {
+#inventory-wrapper #guide li:last-child {
 	border-bottom: none;
 }
 
-#form #guide li strong {
+#inventory-wrapper #guide li strong {
 	margin-right: 5px;
 	padding-left: 5px;
 	font-size: 32px;
 	font-weight: 200;
 }
 
-#form #guide li {
+#inventory-wrapper #guide li {
 	color: #ccc;
 }
 
-#form #guide li.active { color: #000; }
-#form #guide li.active strong { font-weight: 400; color: #cb4322; }
+#inventory-wrapper #guide li.active { color: #000; }
+#inventory-wrapper #guide li.active strong { font-weight: 400; color: #cb4322; }
 
 #leadform {
 	display: none;
